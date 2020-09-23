@@ -2,8 +2,6 @@
 import sqlite3
 import csv
 
-
-
 #open csv file
 csvfile=open("music_titles.csv","r")
 reader=csv.DictReader(csvfile)
@@ -38,20 +36,16 @@ for row in reader:
      isni.append(row["ISNI code"])
      ipi.append(row["IPI code"])
      isrc.append(row["ISRC"])
-     sesac_id.append(["SESAC Work ID"])
-     sesac_pub.append(["SESAC Publisher"])
-     ascap_id.append(["ASCAP Work ID"])
-     ascap_pub.append(["ASCAP Publisher"])
-     ascap_ipi.append(["ASCAP Publisher' IPI"])
-     bmi_id.append(["BMI Work ID"])
-     bmi_pub.append(["BMI Publisher"])
-     gmr_id.append(["GMR Work ID"])
-     gmr_pub.append(["GMR Publisher"])
-     gmr_ipi.append(["GMR Publisher' IPI"])
-
-
-
-
+     sesac_id.append(row["SESAC Work ID"])
+     sesac_pub.append(row["SESAC Publisher"])
+     ascap_id.append(row["ASCAP Work ID"])
+     ascap_pub.append(row["ASCAP Publisher"])
+     ascap_ipi.append(row["ASCAP Publishers' IPI"])
+     bmi_id.append(row["BMI Work ID"])
+     bmi_pub.append(row["BMI Publisher"])
+     gmr_id.append(row["GMR Work ID"])
+     gmr_pub.append(row["GMR Publisher"])
+     gmr_ipi.append(row["GMR Publishers' IPI"])
 
 
 
@@ -71,22 +65,21 @@ cur.execute("""CREATE TABLE Music(title TEXT,artist TEXT,album TEXT,writer TEXT,
 #inserting values into the Table
 for i in range(0,len(title)):
 	cur.execute("""INSERT INTO Music(title,artist,album,writer,othername,isni,ipi,
-		                             isrc,
-		                             sesac_id,sesac_pub,ascap_id,ascap_pub,ascap_ipi,
+		                             isrc,sesac_id,sesac_pub,ascap_id,ascap_pub,ascap_ipi,
 		                             bmi_id,bmi_pub,gmr_id,gmr_pub,gmr_ipi) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
 		                             (title[i],artist[i],album[i],writer[i],
-		                             othername[i],isni[i],ipi[i],"check",sesac_id[i],sesac_pub[i],ascap_id[i],
+		                             othername[i],isni[i],ipi[i],isrc[i],sesac_id[i],sesac_pub[i],ascap_id[i],
 		                             ascap_pub[i],ascap_ipi[i],bmi_id[i],bmi_pub[i],gmr_id[i],gmr_pub[i],gmr_ipi[i]))
 	conn.commit()
 
 
 
-
-
 #display values from the database
-sqlstr="SELECT title,artist FROM Music ORDER BY title"
+sqlstr="""SELECT title,artist,album,writer,othername,isni,ipi,isrc,sesac_id,sesac_pub,
+                 ascap_id,ascap_pub,ascap_ipi,bmi_id,bmi_pub,gmr_id,gmr_pub,gmr_ipi FROM Music ORDER BY title"""
 for row in cur.execute(sqlstr):
-	print(row[0],row[1])
+	print(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],
+		  row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17])
 
 
 cur.close()
